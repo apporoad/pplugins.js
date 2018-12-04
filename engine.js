@@ -13,7 +13,9 @@ var icheckInject = inputModule =>{
  */
 exports.inject=(inputModule,pluginName) =>{
     icheckInject(inputModule)
-
+    if(!pluginName){
+        //todo read config
+    }
     //console.log(inputModule)
     for(var mt in inputModule){
         var element = inputModule[mt]
@@ -21,6 +23,7 @@ exports.inject=(inputModule,pluginName) =>{
             //console.log(element)
             //todo
             inputModule[mt] = function(){console.log('hello good day')}
+
         }
     }
 }
