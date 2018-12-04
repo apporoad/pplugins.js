@@ -1,0 +1,30 @@
+{
+  "name": "pplugins",
+  "version": "1.0.0",
+  "description": "plugins for node",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/apporoad/pplugins.js.git"
+  },
+  "keywords": [
+    "plugin",
+    "node",
+    "ioc"
+  ],
+  "author": "apporoad",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/apporoad/pplugins.js/issues"
+  },
+  "homepage": "https://github.com/apporoad/pplugins.js#readme",
+  "dependencies": {
+    "peeriocjs": "^2.4.1"
+  }
+}

@@ -8,9 +8,19 @@ var unimplemented = invokeModule=>{
         throw Error("pplugins:index: your must input a module")
     }
 
-    console.log(invokeModule)
-
-    //get set
+    //console.log(invokeModule)
+    //wait module loaded ,then ...
+    Object.defineProperty(invokeModule, 'loaded', {
+        get: function() {
+            return loaded;
+        },
+        set: function(value) {
+            if(value){
+                //console.log(invokeModule.id + ' loaded: ' + value);
+                //here load complete
+            }
+        }
+    })
 }
 
 exports.unimplemented = unimplemented 
