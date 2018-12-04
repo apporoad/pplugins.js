@@ -1,4 +1,4 @@
-
+var engine = require('./engine')
 
 
 var unimplemented = invokeModule=>{ 
@@ -18,6 +18,7 @@ var unimplemented = invokeModule=>{
             if(value){
                 //console.log(invokeModule.id + ' loaded: ' + value);
                 //here load complete
+                console.log(invokeModule)
             }
         }
     })
