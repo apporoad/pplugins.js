@@ -29,6 +29,69 @@ exports.inject=(inputModule,pluginName) =>{
 }
 
 
+/*
+proxy maybe:
+    "/abc/acb/test.js"
+    {}
+    null
+*/
 exports.getProxy = (anything)=>{
+    //todo check
+    if(util.Type.isString(anything)){
+        return require(anything)
+    }
+    if(util.Type.isObject(anything) || util.Type.isFunction(anything)){
+        return anything
+    }
+    return null
+}
 
+/*
+proxy maybe:
+    {}
+    null
+*/
+exports.getProxyFunctionHandler = (proxy) =>{
+    //todo inputs outputs ....
+    if(!proxy){
+        return (key,params) =>{
+            //todo
+            return ioc.module("xxxx").invoke(key)[key](params)
+        }
+    }
+    return (key,params)=>{
+        //todo need edit
+        return proxy[key](params)
+    }
+}
+
+// returns promise
+/*
+proxy maybe:
+    "/abc/acb/test.js"
+    {}
+    null
+
+
+*/
+exports.setProxy =(json, proxy) =>{
+    var porxyHandler = exports.getProxyFunctionHandler(exports.getProxy(proxy))
+    if(util.Type.isObject(json) || util.Type.isFunction(json)){
+        for(var key in json){
+            var val = json[key]
+            if(util.Type.isFunction(val)){
+                //set function proxy
+                json[key] = (...params)=>{ 
+                    return porxyHandler(key,params)
+                    //console.log('here proxy method :' + key)
+                }
+            } else{
+                json[key] = "proxy val :" + val
+                // todo get set 
+            }
+        }
+    }
+    else{
+        console.error("ppulgins:engine: only Object or Function can setProxy :" + json)
+    }
 }
