@@ -28,6 +28,8 @@ exports.inject=(inputModule,pluginName) =>{
     }
 }
 
+exports.autoInject = ()=>{}
+
 
 /*
 proxy maybe:
@@ -51,7 +53,7 @@ proxy maybe:
     {}
     null
 */
-exports.getProxyFunctionHandler = (proxy) =>{
+exports.getProxyFunctionHandler = (proxy, originInfo) =>{
     //todo inputs outputs ....
     if(!proxy){
         return (key,params) =>{
@@ -72,10 +74,16 @@ proxy maybe:
     {}
     null
 
+originInfo can be:
+{
+    name : "moduleName",
+    pluginName : "????"
+}
 
 */
-exports.setProxy =(json, proxy) =>{
-    var porxyHandler = exports.getProxyFunctionHandler(exports.getProxy(proxy))
+exports.setProxy =(origin, proxy ,originInfo) =>{
+    var json = origin
+    var porxyHandler = exports.getProxyFunctionHandler(exports.getProxy(proxy),originInfo)
     if(util.Type.isObject(json) || util.Type.isFunction(json)){
         for(var key in json){
             var val = json[key]
