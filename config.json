@@ -1,0 +1,5 @@
+{
+    "pplugins":{
+        "pluginEndWith" : ".plugin.js"
+    }
+}

@@ -1,5 +1,9 @@
 var engine = require('./engine')
+var caller = require('caller.js')
 
+const iSetProxy= invokeModule =>{
+
+}
 
 var unimplemented = invokeModule=>{ 
     // rewrite module.parent
@@ -7,6 +11,7 @@ var unimplemented = invokeModule=>{
     if(!invokeModule){
         throw Error("pplugins:index: your must input a module")
     }
+    //console.log(path)
 
     //console.log(invokeModule)
     //wait module loaded ,then ...
@@ -17,8 +22,8 @@ var unimplemented = invokeModule=>{
         set: function(value) {
             if(value){
                 //console.log(invokeModule.id + ' loaded: ' + value);
-                //here load complete
-                console.log(invokeModule)
+                //here load complete //and set proxy
+                iSetProxy(invokeModule)
             }
         }
     })

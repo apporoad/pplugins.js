@@ -27,3 +27,8 @@ exports.inject=(inputModule,pluginName) =>{
         }
     }
 }
+
+
+exports.getProxy = (anything)=>{
+
+}
