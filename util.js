@@ -100,3 +100,23 @@ exports.indexOf= (str, search) =>{
 }
 
 
+exports.ArrayContains = (array,one, compareFn) =>{
+    return exports.ArrayIndexOf(array,one,compareFn) > -1
+}
+
+exports.ArrayIndexOf = (array,one, compareFn) =>{
+    for(var i =0 ;i< array.length;i++){
+        element= array[i]
+        if(compareFn){
+            if(compareFn(one,element)){
+                return i
+            }
+        }
+        else{
+            if(one == element){
+                return i
+            }
+        }
+    }
+    return -1 
+}

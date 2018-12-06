@@ -34,17 +34,7 @@ exports.inject=(inputModule,pluginName) =>{
 
 exports.autoInject = ()=>{}
 
-exports.getPlugin = (moduleName="",pluginPath="")=>{
-    if(pluginPath){
-        if(fs.existsSync(pluginPath)){
-            console.error("pplugins:engine:getPlugin: plguginPath must exsits ： " + pluginPath)
-            throw Error("pplugins:engine:getPlugin: plguginPath must exsits ： " + pluginPath)
-        }
-        if(!lc.pathPluginMapGet(pluginPath)){
-            lc.pathPluginMapSet(pluginPath, require(pluginPath))
-        }
-        return lc.pathPluginMapGet(pluginPath)
-    }
+exports.getPlugin = (moduleName="", pluginType="")=>{
     if(moduleName){
         //todo guess plugin?
     }
