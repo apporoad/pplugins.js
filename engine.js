@@ -57,25 +57,24 @@ exports.setProxy =(origin, proxy ) =>{
                     var keepKey = key
                     return  ((...params)=>{ 
                         //console.log("CCCCCCCCCCCCCC:" + keepKey)
-                        var p = origin.iproxy
                         //if has proxy
-                        if(p){
-                            if(!p[keepKey]){
+                        if(origin.iproxy){
+                            if(!origin.iproxy[keepKey]){
                                 console.error("proxy: your proxy method undefined :" + keepKey )
                                 throw new Error("proxy: your proxy method undefined :" + keepKey )
                             }
-                            if(!util.Type.isFunction(p[keepKey])){
+                            if(!util.Type.isFunction(origin.iproxy[keepKey])){
                                 console.trace()
                                 console.error("proxy: your proxy."+ keepKey+" must be a function ")
                                 throw new Error("proxy: your proxy."+ keepKey + " must be a function ")
                             }
-                            return p[keepKey].apply(p,arguments)
+                            return origin.iproxy[keepKey].apply(origin.iproxy,arguments)
                         }else{
                             console.error("proxy: your iproxy have be removed ,please check your code : " + keepKey)
                             throw new Error("proxy: your iproxy have be removed ,please check your code : " + keepKey)
                         }
                         //console.log('here proxy method :' + key)
-                    }).bind(origin)
+                    })
                 }
 
                 origin[key] = generate()
