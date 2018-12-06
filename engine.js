@@ -36,6 +36,12 @@ exports.checkProxy = (origin,proxy,verbose) =>{
 }
 
 exports.setProxy =(origin, proxy ) =>{
+    //
+    if(origin.iproxy){
+        console.log("accc")
+        origin.iproxy = proxy
+        return
+    }
     //override proxy
     origin.iproxy = proxy
     //check proxy match origin
@@ -64,12 +70,13 @@ exports.setProxy =(origin, proxy ) =>{
                                 throw new Error("proxy: your proxy method undefined :" + keepKey )
                             }
                             if(!util.Type.isFunction(origin.iproxy[keepKey])){
-                                console.trace()
+                                //console.trace()
                                 console.error("proxy: your proxy."+ keepKey+" must be a function ")
                                 throw new Error("proxy: your proxy."+ keepKey + " must be a function ")
                             }
                             return origin.iproxy[keepKey].apply(origin.iproxy,arguments)
                         }else{
+                            //console.log(origin)
                             console.error("proxy: your iproxy have be removed ,please check your code : " + keepKey)
                             throw new Error("proxy: your iproxy have be removed ,please check your code : " + keepKey)
                         }
@@ -115,6 +122,6 @@ exports.setProxy =(origin, proxy ) =>{
     else{
         console.error("ppulgins:engine: only Object or Function can setProxy :" + origin)
     }
-
+    //console.log(origin)
     //console.log(origin.iproxy)
 }

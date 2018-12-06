@@ -39,8 +39,8 @@ proxy2.obj = {abc : "hello world"}
 proxy2.arr = [1,2,3,4,5,6]
 proxy2.num = 100
 
-//engine.setProxy(abc,proxy2)
-engine.iproxy = proxy2
+engine.setProxy(abc,proxy2)
+//abc.iproxy = proxy2
 
 abc.fn()
 console.log(abc.obj)
