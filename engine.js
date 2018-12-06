@@ -37,7 +37,7 @@ var icheckInject = inputModule =>{
 /**
  *  inject your module with unreged methods
  */
-exports.inject=(inputModule,pluginName) =>{
+exports.injectPlugin=(inputModule,pluginName) =>{
     icheckInject(inputModule)
     if(!pluginName){
         //todo read config
@@ -54,8 +54,28 @@ exports.inject=(inputModule,pluginName) =>{
     }
 }
 
+
 var iAutoInject = ()=>{
     //todo here cycle 
+    // find .plugin.js
+}
+
+// here auto execute injectRequestQueue
+var iAutoMatchRequest =()=>{
+    //todo here cycle 
+}
+
+exports.getPlugin =(moduleName="", pluginType="")=>{
+    if(lc.namePlguinsMapGet(moduleName,pluginType)){
+        var arr =lc.namePlguinsMapGet(moduleName,pluginType)
+        if(arr.length==1)
+            return arr[0]
+        if(arr.length>1){
+            console.log("pplugin: getPlugin: find one more plugin ， return first one")
+            return arr[0]
+        }
+    }
+    throw Error("cant find your plugin:" + moduleName + " " + pluginType )
 }
 
 
@@ -197,3 +217,4 @@ exports.setProxy =(origin, proxy ,completeFn) =>{
 
 
 iAutoInject()
+iAutoMatchRequest()
