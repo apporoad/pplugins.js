@@ -1,11 +1,8 @@
 var engine = require('./engine')
 var caller = require('caller.js')
 
-const iSetProxy= invokeModule =>{
 
-}
-
-var unimplemented = invokeModule=>{ 
+var unimplemented = (invokeModule,moduleName="",plugin="")=>{ 
     // rewrite module.parent
     //console.log(module.parent)
     if(!invokeModule){
@@ -23,7 +20,8 @@ var unimplemented = invokeModule=>{
             if(value){
                 //console.log(invokeModule.id + ' loaded: ' + value);
                 //here load complete //and set proxy
-                iSetProxy(invokeModule)
+                //console.log(invokeModule.exports)
+                engine.setProxy(invokeModule.exports,engine.getPlugin(moduleName,plugin))
             }
         }
     })
@@ -33,5 +31,5 @@ exports.unimplemented = unimplemented
 
 
 
-exports.implement =() => {}
+exports.implement = moduleName => {}
 
