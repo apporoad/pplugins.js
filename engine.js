@@ -4,9 +4,31 @@ const util = require('./util')
 const fs = require('fs')
 const lc = require('./localCache')
 
-
+// a queue stores what need to load plugins
+/*
+[
+    {
+        key : xxxxxxxxxxxxxxxxxxxxx,
+        origin:{
+            test : {},
+            abc : function(){}
+        },
+        moduleName:"",
+        type : ""
+    }
+]
+*/
+var injectRequestQueue = new Array()
 
 exports.run =()=>{}
+
+var iGenerateInjectRequestKey = request=>{
+    if(request.moduleName && request.type){
+        return request.moduleName + "___" + request.type
+    }
+    //todo key = origin.keys  + modulename + type
+    return "abc"
+}
 
 
 var icheckInject = inputModule =>{
@@ -32,12 +54,34 @@ exports.inject=(inputModule,pluginName) =>{
     }
 }
 
-exports.autoInject = ()=>{}
+var iAutoInject = ()=>{
+    //todo here cycle 
+}
 
-exports.getPlugin = (moduleName="", pluginType="")=>{
-    if(moduleName){
-        //todo guess plugin?
+
+exports.getProxyPlugin = (origin,moduleName="", pluginType="")=>{
+    var proxy = {}
+    var key = iGenerateInjectRequestKey({
+        origin : origin,
+        moduleName :moduleName,
+        type : pluginType
+    })
+    var invokeModule = ioc.module(key + "_pplugins")
+
+    // todo check origin
+    for(var k in origin){
+        invokeModule.record([k])
+        //here function and others are same
+        proxy[k] = invokeModule.invoke(k).sync[k]
     }
+    //add    injectRequestQueue
+    injectRequestQueue.push({
+        key: key,
+        origin : origin,
+        moduleName : moduleName,
+        type: pluginType
+    }) 
+    return proxy
 }
 
 
@@ -47,7 +91,7 @@ exports.checkProxy = (origin,proxy,verbose) =>{
     //todo
 }
 
-exports.setProxy =(origin, proxy ) =>{
+exports.setProxy =(origin, proxy ,completeFn) =>{
     //
     if(origin.iproxy){
         console.log("accc")
@@ -106,6 +150,9 @@ exports.setProxy =(origin, proxy ) =>{
                     var keepKey = key
                     return  function() {
                         if(origin.iproxy){
+                            if(util.Type.isFunction(origin.iproxy[keepKey])){
+                                return origin.iproxy[keepKey]()
+                            }
                             return origin.iproxy[keepKey]
                         }
                         console.error("proxy: your iproxy have be removed ,please check your code : " + keepKey)
@@ -116,7 +163,12 @@ exports.setProxy =(origin, proxy ) =>{
                     var keepKey = key
                     return function(value) {
                         if(origini.iproxy){
-                            origin.iproxy[keepKey] = value
+                            if(util.Type.isFunction(origin.iproxy[keepKey])){
+                                origin.iproxy[keepKey](value)
+                            }else{
+                                origin.iproxy[keepKey] = value
+                            }
+                            
                         }
                         console.error("proxy: your iproxy have be removed ,please check your code : " + keepKey)
                         throw new Error("proxy: your iproxy have be removed ,please check your code : " + keepKey)
@@ -134,6 +186,14 @@ exports.setProxy =(origin, proxy ) =>{
     else{
         console.error("ppulgins:engine: only Object or Function can setProxy :" + origin)
     }
+
+    if(completeFn){
+        completeFn(origin,proxy)
+    }
     //console.log(origin)
     //console.log(origin.iproxy)
 }
+
+
+
+iAutoInject()

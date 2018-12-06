@@ -47,3 +47,9 @@ console.log(abc.obj)
 console.log(abc.arr)
 console.log(abc.num)
 console.log(abc.aa)
+
+console.log("here to super iproxy ===========================================")
+
+proxy2.obj = value=>{ return "haha"}
+
+console.log(abc.obj)

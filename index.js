@@ -2,7 +2,7 @@ var engine = require('./engine')
 var caller = require('caller.js')
 
 
-var unimplemented = (invokeModule,moduleName="",plugin="")=>{ 
+var unimplemented = (invokeModule,moduleName="",pluginType="")=>{ 
     // rewrite module.parent
     //console.log(module.parent)
     if(!invokeModule){
@@ -21,7 +21,7 @@ var unimplemented = (invokeModule,moduleName="",plugin="")=>{
                 //console.log(invokeModule.id + ' loaded: ' + value);
                 //here load complete //and set proxy
                 //console.log(invokeModule.exports)
-                engine.setProxy(invokeModule.exports,engine.getPlugin(moduleName,plugin))
+                engine.setProxy(invokeModule.exports,engine.getProxyPlugin(moduleName,pluginType))
             }
         }
     })
