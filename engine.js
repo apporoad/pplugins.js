@@ -31,75 +31,91 @@ exports.inject=(inputModule,pluginName) =>{
 exports.autoInject = ()=>{}
 
 
-/*
-proxy maybe:
-    "/abc/acb/test.js"
-    {}
-    null
-*/
-exports.getProxy = (anything)=>{
-    //todo check
-    if(util.Type.isString(anything)){
-        return require(anything)
-    }
-    if(util.Type.isObject(anything) || util.Type.isFunction(anything)){
-        return anything
-    }
-    return null
+exports.checkProxy = (origin,proxy,verbose) =>{
+    //todo
 }
 
-/*
-proxy maybe:
-    {}
-    null
-*/
-exports.getProxyFunctionHandler = (proxy, originInfo) =>{
-    //todo inputs outputs ....
-    if(!proxy){
-        return (key,params) =>{
-            //todo
-            return ioc.module("xxxx").invoke(key)[key](params)
-        }
-    }
-    return (key,params)=>{
-        //todo need edit
-        return proxy[key](params)
-    }
-}
-
-// returns promise
-/*
-proxy maybe:
-    "/abc/acb/test.js"
-    {}
-    null
-
-originInfo can be:
-{
-    name : "moduleName",
-    pluginName : "????"
-}
-
-*/
-exports.setProxy =(origin, proxy ,originInfo) =>{
-    var json = origin
-    var porxyHandler = exports.getProxyFunctionHandler(exports.getProxy(proxy),originInfo)
-    if(util.Type.isObject(json) || util.Type.isFunction(json)){
-        for(var key in json){
-            var val = json[key]
+exports.setProxy =(origin, proxy ) =>{
+    //override proxy
+    origin.iproxy = proxy
+    //check proxy match origin
+    exports.checkProxy(origin,proxy,true)
+    if(util.Type.isObject(origin) || util.Type.isFunction(origin)){
+        // console.log('aaaaaaaaaaaa')
+        for(var key in origin){
+            //ignore iproxy
+            if(key == "iproxy")
+            {
+                continue
+            }
+            var val = origin[key]
             if(util.Type.isFunction(val)){
+                //console.log("aaaaaaaaaaaaaaaaaa:" +key)
                 //set function proxy
-                json[key] = (...params)=>{ 
-                    return porxyHandler(key,params)
-                    //console.log('here proxy method :' + key)
+                //closure
+                var generate = ()=>{
+                    var keepKey = key
+                    return  ((...params)=>{ 
+                        //console.log("CCCCCCCCCCCCCC:" + keepKey)
+                        var p = origin.iproxy
+                        //if has proxy
+                        if(p){
+                            if(!p[keepKey]){
+                                console.error("proxy: your proxy method undefined :" + keepKey )
+                                throw new Error("proxy: your proxy method undefined :" + keepKey )
+                            }
+                            if(!util.Type.isFunction(p[keepKey])){
+                                console.trace()
+                                console.error("proxy: your proxy."+ keepKey+" must be a function ")
+                                throw new Error("proxy: your proxy."+ keepKey + " must be a function ")
+                            }
+                            return p[keepKey].apply(p,arguments)
+                        }else{
+                            console.error("proxy: your iproxy have be removed ,please check your code : " + keepKey)
+                            throw new Error("proxy: your iproxy have be removed ,please check your code : " + keepKey)
+                        }
+                        //console.log('here proxy method :' + key)
+                    }).bind(origin)
                 }
+
+                origin[key] = generate()
             } else{
-                json[key] = "proxy val :" + val
+                //console.log("bbbbbbbbbbbbbbb:" + key)
+                // ison[key] = "proxy val :" + val
+            
+                //closure
+                var gGet = ()=>{
+                    var keepKey = key
+                    return  function() {
+                        if(origin.iproxy){
+                            return origin.iproxy[keepKey]
+                        }
+                        console.error("proxy: your iproxy have be removed ,please check your code : " + keepKey)
+                        throw new Error("proxy: your iproxy have be removed ,please check your code : " + keepKey)
+                    }
+                }
+                var gSet = ()=>{
+                    var keepKey = key
+                    return function(value) {
+                        if(origini.iproxy){
+                            origin.iproxy[keepKey] = value
+                        }
+                        console.error("proxy: your iproxy have be removed ,please check your code : " + keepKey)
+                        throw new Error("proxy: your iproxy have be removed ,please check your code : " + keepKey)
+                    }
+                }
+
                 // todo get set 
+                Object.defineProperty(origin, key, {
+                    get: gGet(),
+                    set: gSet()
+                })
             }
         }
     }
     else{
-        console.error("ppulgins:engine: only Object or Function can setProxy :" + json)
+        console.error("ppulgins:engine: only Object or Function can setProxy :" + origin)
     }
+
+    //console.log(origin.iproxy)
 }
