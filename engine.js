@@ -58,6 +58,7 @@ exports.injectPlugin=(inputModule,pluginName) =>{
 var iAutoInject = ()=>{
     //todo here cycle 
     // find .plugin.js
+    console.trace()
 }
 
 // here auto execute injectRequestQueue
@@ -216,5 +217,12 @@ exports.setProxy =(origin, proxy ,completeFn) =>{
 
 
 
-iAutoInject()
-iAutoMatchRequest()
+exports.init =function(){
+    if(!global.ppluginInitStarted){
+        global.ppluginInitStarted =true
+        iAutoInject()
+        iAutoMatchRequest()
+    }
+}
+
+//iAutoInject()

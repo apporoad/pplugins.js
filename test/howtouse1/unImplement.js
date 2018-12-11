@@ -3,7 +3,7 @@
 var fs = require('fs')
 
 // 1. first declare it is unimplement
-require('../index').unimplemented(module)
+require('../../index').unimplemented(module)
 
 //2. declare your unImplement methods
 exports.fn1 = ()=>{}
@@ -15,8 +15,8 @@ exports.fn1.output = "yes"
 exports.fn2 = ()=>{}
 //todo 
 
-exports.hello.inputs=[["abc"]]
+exports.fn2.inputs=[["abc"]]
 
-exports.hello.output = "yes"
+exports.fn2.output = "yes"
 
-exports.hello.outputs = ["",1]
+exports.fn2.outputs = ["",1]
