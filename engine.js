@@ -3,6 +3,7 @@ const util = require('./util')
 
 const fs = require('fs')
 const lc = require('./localCache')
+const caller = require('caller.js')
 
 // a queue stores what need to load plugins
 /*
@@ -55,10 +56,17 @@ exports.injectPlugin=(inputModule,pluginName) =>{
 }
 
 
+var igetTopScanPath = dir=>{
+    //recurse find a dir with node_modules as topScanPath
+    
+}
+
 var iAutoInject = ()=>{
     //todo here cycle 
     // find .plugin.js
-    console.trace()
+    // console.trace()
+    console.log(caller.getTopCallerDir())
+
 }
 
 // here auto execute injectRequestQueue
