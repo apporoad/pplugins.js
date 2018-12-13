@@ -57,8 +57,8 @@ exports.injectPlugin=(inputModule,pluginName) =>{
 
 
 var igetTopScanPath = dir=>{
-    //recurse find a dir with node_modules as topScanPath
-    
+    //recurse find a dir with node_modules or package.json as topScanPath
+    //todos
 }
 
 var iAutoInject = ()=>{
