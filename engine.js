@@ -2,7 +2,9 @@ const ioc = require('peeriocjs')
 const util = require('./util')
 
 const fs = require('fs')
+const path = require('path')
 const lc = require('./localCache')
+const config = require('./config.json')
 const caller = require('caller.js')
 
 // a queue stores what need to load plugins
@@ -55,23 +57,53 @@ exports.injectPlugin=(inputModule,pluginName) =>{
     }
 }
 
-
+var iJudgeDir = dir=>{
+    var packageJson = path.join(dir,"package.json")
+    var node_modules = path.join(dir, "node_modules")
+    if(fs.existsSync(packageJson) || fs.existsSync(node_modules)){
+        return true
+    }
+    return false
+}
+//recurse find a dir with node_modules or package.json as topScanPath
 var igetTopScanPath = dir=>{
-    //recurse find a dir with node_modules or package.json as topScanPath
-    //todos
+    var dirs = new Array()
+
+    var currentDir = dir
+    while(true){
+        if(iJudgeDir(currentDir)){
+            dirs.push(currentDir)
+        }
+        if(currentDir == path.dirname(currentDir)){
+            break
+        }
+        currentDir = path.dirname(currentDir)
+        //console.log(currentDir)
+    }
+    //console.log(dirs.pop())
+    return dirs.length >0 ? dirs.pop() : null
 }
 
 var iAutoInject = ()=>{
     //todo here cycle 
-    // find .plugin.js
+    // find .plugin.js or dir with plugin.json
     // console.trace()
-    console.log(caller.getTopCallerDir())
+    // console.log(caller.getTopCallerDir())
+    var packageRootPath = igetTopScanPath(caller.getTopCallerDir())
+    if(packageRootPath){
 
+    }else{
+        //todo verbose
+    }
 }
 
 // here auto execute injectRequestQueue
 var iAutoMatchRequest =()=>{
     //todo here cycle 
+}
+
+exports.scanPlugin= (dir)=>{
+
 }
 
 exports.getPlugin =(moduleName="", pluginType="")=>{
