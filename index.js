@@ -1,6 +1,4 @@
 var engine = require('./engine')
-var caller = require('caller.js')
-
 
 var unimplemented = (invokeModule,moduleName="",pluginType="")=>{ 
     // init first

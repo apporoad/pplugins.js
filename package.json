@@ -26,6 +26,7 @@
   "homepage": "https://github.com/apporoad/pplugins.js#readme",
   "dependencies": {
     "caller.js": "^1.0.3",
+    "commander": "^2.19.0",
     "peeriocjs": "^2.4.1"
   }
 }
