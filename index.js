@@ -1,8 +1,13 @@
 var engine = require('./engine')
+var caller =require('caller.js')
+var util = require('./util')
 
 var unimplemented = (invokeModule,moduleName="",pluginType="")=>{ 
     // init first
     engine.init()
+
+    moduleName = moduleName || 'default'
+    pluginType = pluginType || 'default'
     // rewrite module.parent
     //console.log(module.parent)
     if(!invokeModule){
@@ -35,4 +40,33 @@ exports.unimplemented = unimplemented
 exports.implement = moduleName => {}
 
 
+exports.invoker = invokerName =>{
+    global.pluginInvokerName = invokerName
+}
 
+/**
+ * 
+{
+    invoker : "your program instance's name",
+    pRootPath : "your plugin root Path, default is the method (use) is invoked ,only absolutely path",
+
+}
+ */
+exports.use = options =>{
+
+}
+
+/**
+ for dynamic plguin situation
+ */
+exports.getDynamicProxy = (yourModuleOrModulePath,moduleName="",pluginType="" )=>{
+    if(!yourModuleOrModulePath)
+        yourModuleOrModulePath = caller.getCaller().fileName
+    moduleName = moduleName || 'default'
+    pluginType = pluginType || 'default'
+
+    if(util.Type.isString(yourModuleOrModulePath)){
+        //todo
+    }
+    //todo
+}
