@@ -27,7 +27,8 @@
   "dependencies": {
     "caller.js": "^1.0.3",
     "commander": "^2.19.0",
-    "peeriocjs": "^2.4.1"
+    "peeriocjs": "^2.4.1",
+    "uicli.js": "git+https://github.com/aceunlonely/uicli.js.git"
   },
   "bin": {
     "pp": "./bin/pp.js",
