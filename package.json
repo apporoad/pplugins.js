@@ -28,5 +28,9 @@
     "caller.js": "^1.0.3",
     "commander": "^2.19.0",
     "peeriocjs": "^2.4.1"
+  },
+  "bin": {
+    "pp": "./pp.js",
+    "pplugin": "./pp.js"
   }
 }
