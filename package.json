@@ -30,7 +30,7 @@
     "peeriocjs": "^2.4.1"
   },
   "bin": {
-    "pp": "./pp.js",
-    "pplugin": "./pp.js"
+    "pp": "./bin/pp.js",
+    "pplugin": "./bin/pp.js"
   }
 }
