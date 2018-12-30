@@ -2,7 +2,6 @@
 const path = require('path')
 const program = require('commander')
 const fs = require('fs')
-const cli = require('../cli')
 const uicli = require('uicli.js')
 const find = require('find')
 const util = require('../util')
