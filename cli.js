@@ -158,3 +158,8 @@ exports.clear = ()=>{
     if(fs.existsSync(assignListPath))
         fs.unlinkSync(assignListPath)
 }
+
+
+exports.assign = (invoker,moduleName,type,version)=>{
+
+}
