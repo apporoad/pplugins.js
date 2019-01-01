@@ -16,6 +16,7 @@ commander.version('v' + require('../package.json').version)
 .command('publish [path]','just like use')
 .command('publish','just like ( use . )')
 .command('ls' , 'list all plugins')
+.command('ll' , 'more detals for ls')
 .command('refresh','fresh all plugins,check plugins, if invalid ,remove it')
 .command('clear' , 'clear useing plugins , be careful to use')
 

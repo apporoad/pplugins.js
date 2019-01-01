@@ -23,11 +23,10 @@ var start =()=>{
         }
         var pplguinAllJson = cli.getPpluginsAll()
         files.forEach(file=>{
-            if(!pplguinAllJson[file]){
-                pplguinAllJson[file] =new Date()
-                console.log('find and join ppgluins :' + file)
+            if(pplguinAllJson[file]){
+                delete pplguinAllJson[file]
+                console.log('find and remove from ppgluins :' + file)
             }else{
-                //nothing to do
             }
         })
         cli.setPpluginsAll(pplguinAllJson)
