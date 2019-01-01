@@ -8,6 +8,7 @@ if(!fs.existsSync(ppluginsDir))
     fs.mkdirSync(ppluginsDir)
 const ppluginsAllPath = path.join(ppluginsDir,'pplugins.all')
 const ppluginsJsonPath = path.join(ppluginsDir , 'pplugins.json')
+const assignListPath = path.json(ppluginsDir,'assignList.json')
 
 
 /**
@@ -147,4 +148,13 @@ exports.ls = isDetail=>{
     }else{
         console.log('pliz use first')
     }
+}
+
+exports.clear = ()=>{
+    if(fs.existsSync(ppluginsAllPath))
+        fs.unlinkSync(ppluginsAllPath)
+    if(fs.existsSync(ppluginsJsonPath))
+        fs.unlinkSync(ppluginsJsonPath)
+    if(fs.existsSync(assignListPath))
+        fs.unlinkSync(assignListPath)
 }
