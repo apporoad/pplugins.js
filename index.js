@@ -27,7 +27,7 @@ var unimplemented = (invokeModule,moduleName="",pluginType="")=>{
                 //console.log(invokeModule.id + ' loaded: ' + value);
                 //here load complete //and set proxy
                 //console.log(invokeModule.exports)
-                engine.setProxy(invokeModule.exports,engine.getProxyPlugin(moduleName,pluginType))
+                engine.setProxy(invokeModule.exports,engine.getProxyPlugin(invokeModule.exports,moduleName,pluginType))
             }
         }
     })

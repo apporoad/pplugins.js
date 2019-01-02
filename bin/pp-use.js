@@ -16,7 +16,7 @@ var start =()=>{
     usePath =path.resolve(process.cwd(),usePath)
 
     // find files which named plugin.json
-    find.file(usePath,/^plugin\.json$/,files=>{
+    find.file(/plugin\.json$/,usePath,files=>{
         if(!files || files.length==0){
             console.log('cant find init file : plugin.json')
             return

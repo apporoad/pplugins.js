@@ -14,9 +14,11 @@ program.parse(process.argv)
 var start =()=>{
     var usePath = program.args.length >0 ? program.args[0] : '.'
     usePath =path.resolve(process.cwd(),usePath)
-
+    //console
     // find files which named plugin.json
-    find.file(usePath,/^plugin\.json$/,files=>{
+    //console.log(usePath)
+    find.file(/plugin\.json$/,usePath,files=>{
+        //console.log(files)
         if(!files || files.length==0){
             console.log('cant find init file : plugin.json')
             return
@@ -32,7 +34,6 @@ var start =()=>{
         cli.setPpluginsAll(pplguinAllJson)
         console.log('mission completed')
     })
-    
 }
 
 
