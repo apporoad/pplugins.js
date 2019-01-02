@@ -8,3 +8,5 @@ exports.fn2 = p=>{
     //console.log(p)
     console.log(p + ' good good day')
 }
+
+exports.abc = "cdh"

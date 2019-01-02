@@ -28,7 +28,7 @@
     "caller.js": "^1.0.3",
     "commander": "^2.19.0",
     "find": "^0.2.9",
-    "peeriocjs": "^2.4.1",
+    "peeriocjs": "^2.4.2",
     "uicli.js": "git+https://github.com/aceunlonely/uicli.js.git"
   },
   "bin": {
