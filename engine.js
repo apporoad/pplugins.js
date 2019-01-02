@@ -34,30 +34,6 @@ var iGenerateInjectRequestKey = request=>{
     return "abc"
 }
 
-
-// var icheckInject = inputModule =>{
-//     //todo
-// }
-// /**
-//  *  inject your module with unreged methods
-//  */
-// exports.injectPlugin=(inputModule,pluginName) =>{
-//     icheckInject(inputModule)
-//     if(!pluginName){
-//         //todo read config
-//     }
-//     //console.log(inputModule)
-//     for(var mt in inputModule){
-//         var element = inputModule[mt]
-//         if(util.Type.isFunction(element)){
-//             //console.log(element)
-//             //todo
-//             inputModule[mt] = function(){console.log('hello good day')}
-
-//         }
-//     }
-// }
-
 var iJudgeDir = dir=>{
     var packageJson = path.join(dir,"package.json")
     var node_modules = path.join(dir, "node_modules")
@@ -85,19 +61,108 @@ var igetTopScanPath = dir=>{
     return dirs.length >0 ? dirs.pop() : null
 }
 
+var iPpJsonJoin = (ppjson1 ,ppjson2)=>{
+    /*{
+    "yourModuleName" : [
+        {
+            "type" : "pluginType",
+            "version": "1.0.0",
+            "path" : "d:/yourPlugin/p.js",
+            "pluginJsonPath" : "d:/yourPlguin/plugin.json" ,
+            "updateDate" : "xxxxx"
+        }
+    ]
+}*/
+    for(var key in ppjson2){
+        if(ppjson1[key]){
+            ppjson2[key].forEach(element => {
+                if(!util.ArrayContains(ppjson1[key],element,(one,two)=>{
+                    return one.type == two.type && one.version == two.version
+                })){
+                    ppjson1[key].push(element)
+                }
+            });
+        }else{
+            ppjson1[key] =ppjson2[key]
+        }
+    }
+    // resort
+    for(key in ppjson1){
+        var array = ppjson1[key]
+        array.sort((a,b)=>{
+            return a.version>b.version
+        })
+        ppjson1[key] = array
+    }
+    return ppjson1
+}
+
 // auto to find plguins and load to cache
 var iAutoInject = ()=>{
     // here to load local
     var packageRootPath = igetTopScanPath(caller.getTopCallerDir())
+    /*{
+    "yourModuleName" : [
+        {
+            "type" : "pluginType",
+            "version": "1.0.0",
+            "path" : "d:/yourPlugin/p.js",
+            "pluginJsonPath" : "d:/yourPlguin/plugin.json" ,
+            "updateDate" : "xxxxx"
+        }
+    ]
+}*/
     var localPPJson = {}
     if(packageRootPath){
         localPPJson =  cli.getPpluginsJsonFromDir(packageRootPath)
     }
     // here to load global
     var globalPPJson = cli.getGlobalPpluginsJson()
+    //join togather
+    var totalPPJson = iPpJsonJoin(localPPJson,globalPPJson)
     // get assign
-    var assign = cli.getAssign( global.pluginInvokerName || 'default')
+    /*{
+    "module" : "moduleName",
+    "type" : {
+            "moduleName" : "type"
+    },
+    "version" : {
+            "moduleName" : {
+                "type" :"xxxx"
+    } 
+}*/
+    var assign = cli.getAssign(global.pluginInvokerName || 'default')
     // todos
+    //lc.namePlguinsMapAdd
+    // find assign and set default
+    if(assign.module){
+        if(totalPPJson[assign.module]){
+            lc.namePlguinsMapAdd('default',totalPPJson[assign.module][0].path,'default')
+        }
+    }
+    if(assign.type){
+        for(mn in assign.type){
+            if(totalPPJson[mn]){
+                var index = util.ArrayIndexOf(totalPPJson[mn],assign.type[mn],(one,two)=>{
+                    return one == two.type
+                })
+                if(index>-1)
+                    lc.namePlguinsMapAdd(mn,totalPPJson[mn][index].path,'default')
+            }
+        }
+    }
+    if(assign.version){
+        for(mn in assign.version){
+            for(ttype in assign.version[mn]){
+                var index =  util.ArrayIndexOf(totalPPJson[mn],{ type : ttype,version : assign.type[mn][ttype]},(one,two)=>{
+                    return one.type == two.type && one.version == two.version
+                })
+                if(index > -1)
+                    lc.namePlguinsMapAdd(mn,totalPPJson[mn][index].path,ttype)
+            }
+        }
+    }
+
 }
 
 

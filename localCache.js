@@ -62,7 +62,7 @@ returns
 ]
 */
 const iNamePlguinsMapGet = (moduleName,type) =>{
-    moduleName = moduleName || "ppGlobal"
+    moduleName = moduleName || "default"
     if(moduleName){
        var paths = global.pPlugins.namePlguinsMap[moduleName]
        if(paths){
@@ -81,7 +81,7 @@ const iNamePlguinsMapGet = (moduleName,type) =>{
 }
 
 const iNamePlguinsMapAdd = (moduleName,pluginPath,type)=>{
-    moduleName = moduleName || "ppGlobal"
+    moduleName = moduleName || "default"
     if( pluginPath){
         type = type || pathM.parse(pluginPath).name
         var key = pluginPath.replace(/\//g,'_').replace(/\\/g,'_')
@@ -115,7 +115,7 @@ const iNamePlguinsMapAdd = (moduleName,pluginPath,type)=>{
 }
 
 const iNamePlguinsMapRemove = (moduleName,type, pluginPath)=>{
-    moduleName = moduleName || "ppGlobal"
+    moduleName = moduleName || "default"
     if(pluginPath || type){
         if(global.pPlugins.namePlguinsMap[moduleName]){
             pluginPath  = pluginPath ? pluginPath.replace(/\//g,'_').replace(/\\/g,'_') : null

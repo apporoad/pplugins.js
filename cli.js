@@ -163,26 +163,44 @@ exports.clear = ()=>{
 
 /*
 {
-    "invoker" : {
-        "module" : {
-            type : "default",
-            version : "1.0.0"
+    "module" : {
+        "invoker" : "moduleName"
+    },
+    "type" : {
+        "invoker": {
+            "moduleName" : "type"
+        }
+    },
+    "version" : {
+        "invoker" : {
+            "moduleName" : {
+                "type" :"xxxx"
+            } 
         }
     }
 }
 */
 exports.assign = (invoker,moduleName,type,version)=>{
     invoker = invoker || "default"
-    type = type || "default"
-    version = version || "default"
+    // type = type || "default"
+    // version = version || "default"
     var aJson = {}
     if(fs.existsSync(assignListPath)){
         aJson = JSON.parse(fs.readFileSync(assignListPath,'utf8'))
     }
-    aJson[invoker] = {}
-    aJson[invoker][moduleName] = {
-        type : type,
-        version : version
+
+    if(!type && !version){
+        aJson["module"] = aJson["module"] || {}
+        aJson["module"][invoker] = moduleName
+    }else if( !version){
+        aJson["type"] = aJson["type"] || {}
+        aJson["type"][invoker] = aJson["type"][invoker] || {}
+        aJson["type"][invoker][moduleName] = type
+    }else{
+        aJson["version"] = aJson["version"] || {}
+        aJson["version"][invoker] = aJson["version"][invoker] || {}
+        aJson["version"][invoker][moduleName] = aJson["version"][invoker][moduleName] || {}
+        aJson["version"][invoker][moduleName][type] = version
     }
     fs.writeFileSync(assignListPath,JSON.stringify(aJson),'utf8')
 }
@@ -190,17 +208,28 @@ exports.assign = (invoker,moduleName,type,version)=>{
 
 /*
 {
-        "module" : {
-            type : "default",
-            version : "1.0.0"
-        }
-    }
+    "module" : "moduleName",
+    "type" : {
+            "moduleName" : "type"
+    },
+    "version" : {
+            "moduleName" : {
+                "type" :"xxxx"
+    } 
+}
 */
 exports.getAssign =invoker =>{
     if(invoker){
         if(fs.existsSync(assignListPath)){
             aJson = JSON.parse(fs.readFileSync(assignListPath,'utf8'))
-            return aJson[invoker] || {}
+            var module1 = aJson.module ?  aJson.module[invoker] : null
+            var type = aJson.type ? aJson.type[invoker] : null
+            var version = aJson.version ? aJson.version[invoker] : null
+            return {
+                module : module1,
+                type : type,
+                version : version
+            }
         }
     }
     return {}

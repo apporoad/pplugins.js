@@ -48,11 +48,29 @@ same as pplugins.json
 
 ## assignJson
 ```js
+// {
+//     "invoker" : {
+//         "module" : {
+//             type : "default",
+//             version : "1.0.0"
+//         }
+//     }
+// }
+
 {
-    "invoker" : {
-        "module" : {
-            type : "default",
-            version : "1.0.0"
+    "moudle" : {
+        "invoker" : "moduleName"
+    },
+    "type" : {
+        "invoker": {
+            "moduleName" : "type"
+        }
+    },
+    "version" : {
+        "invoker" : {
+            "moduleName" : {
+                "type" :"xxxx"
+            } 
         }
     }
 }
