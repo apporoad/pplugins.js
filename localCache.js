@@ -44,7 +44,11 @@ global.pPlugins.namePlguinsMap = global.pPlugins.namePlguinsMap || {}
 const iPathPluginMapGet = path=>{
     if(path){
         var rp = path.replace(/\//g,'_').replace(/\\/g,'_')  + "_key"
-        return global.pPlugins.pathPluginMap[rp]
+        //console.log('xxxx' + rp)
+        //console.log(global.pPlugins.pathPluginMap)
+        var xx = global.pPlugins.pathPluginMap[rp]
+        //console.log(xx)
+        return xx
     }
     return null
 }
@@ -62,15 +66,23 @@ returns
 ]
 */
 const iNamePlguinsMapGet = (moduleName,type) =>{
+    //console.log(global.pPlugins.namePlguinsMap)
     moduleName = moduleName || "default"
     if(moduleName){
        var paths = global.pPlugins.namePlguinsMap[moduleName]
+       //console.log('xxxx:' + JSON.stringify(paths))
        if(paths){
            var arr = new Array()
            paths.forEach(element => {
+               //console.log('xxxx' +element.key)
+               //console.log(global.pPlugins.pathPluginMap)
                var pw= iPathPluginMapGet(element.key)
+               //console.log('xxxx' + JSON.stringify(pw))
+               //console.log(type + ' ' + element.type + " " + type)
                if(type && element.type == type){
-                   return pw
+                   //console.log(pw)
+                   arr.push(pw)
+                   return
                }
                arr.push(pw)
            });

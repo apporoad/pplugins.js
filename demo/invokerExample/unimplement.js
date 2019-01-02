@@ -1,9 +1,9 @@
 
 
 // unimplement
-require('../../index').unimplemented(this,'test')
+require('../../index').unimplemented(module,'test')
 
-exports.fn1 = p =>{}
+exports.fn1 = p =>{ console.log('xxx')}
 
 
-exports.fn2 = p=>{}
+exports.fn2 = p=>{ console.log('xxx')}

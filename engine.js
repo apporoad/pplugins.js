@@ -101,6 +101,7 @@ var iPpJsonJoin = (ppjson1 ,ppjson2)=>{
 var iAutoInject = ()=>{
     // here to load local
     var packageRootPath = igetTopScanPath(caller.getTopCallerDir())
+    //console.log("packageRootPath : " +packageRootPath )
     /*{
     "yourModuleName" : [
         {
@@ -115,6 +116,7 @@ var iAutoInject = ()=>{
     var localPPJson = {}
     if(packageRootPath){
         localPPJson =  cli.getPpluginsJsonFromDir(packageRootPath)
+        //console.log(localPPJson)
     }
     // here to load global
     var globalPPJson = cli.getGlobalPpluginsJson()
@@ -163,7 +165,10 @@ var iAutoInject = ()=>{
         }
     }
     // add all
+    //console.log(totalPPJson)
     for(mn in totalPPJson){
+        // console.log(totalPPJson[mn])
+        // console.log(mn)
         totalPPJson[mn].forEach(element=>{
             /*{
             "type" : "pluginType",
@@ -204,6 +209,7 @@ exports.getPlugin =(moduleName="", pluginType="")=>{
     //from cache
     if(lc.namePlguinsMapGet(moduleName,pluginType)){
         var arr =lc.namePlguinsMapGet(moduleName,pluginType)
+        //console.log('xxxxxxxxx' + arr)
         if(arr.length==1)
             return arr[0]
         if(arr.length>1){
@@ -224,13 +230,6 @@ exports.getProxyPlugin = (origin,moduleName="", pluginType="")=>{
     })
     var invokeModule = ioc.module(key + "_pplugins")
 
-    // // todo check origin
-    // for(var k in origin){
-    //     invokeModule.record([k])
-    //     //here function and others are same
-    //     proxy[k] = invokeModule.invoke(k).sync[k]
-    // }
-    
     //add    injectRequestQueue
     injectRequestQueue.push({
         key: key,
@@ -239,7 +238,15 @@ exports.getProxyPlugin = (origin,moduleName="", pluginType="")=>{
         type: pluginType
     }) 
     iAutoMatchRequest()
-    proxy = invokeModule.invoke.sync
+    // // todo check origin
+    for(var k in origin){
+        invokeModule.record([k])
+        //here function and others are same
+        proxy[k] = invokeModule.invoke(k).sync[k]
+    }
+    
+    
+    //proxy = invokeModule.invoke.sync
     return proxy
 }
 
@@ -276,6 +283,7 @@ exports.setProxy =(origin, proxy ,completeFn) =>{
                 //closure
                 var generate = ()=>{
                     var keepKey = key
+                    //console.log(key)
                     return  ((...params)=>{ 
                         //console.log("CCCCCCCCCCCCCC:" + keepKey)
                         //if has proxy
@@ -289,7 +297,9 @@ exports.setProxy =(origin, proxy ,completeFn) =>{
                                 console.error("proxy: your proxy."+ keepKey+" must be a function ")
                                 throw new Error("proxy: your proxy."+ keepKey + " must be a function ")
                             }
-                            return origin.iproxy[keepKey].apply(origin.iproxy,arguments)
+                            //console.log(arguments)
+                            //console.log(params)
+                            return origin.iproxy[keepKey].apply(origin.iproxy,params)
                         }else{
                             //console.log(origin)
                             console.error("proxy: your iproxy have be removed ,please check your code : " + keepKey)
@@ -310,6 +320,7 @@ exports.setProxy =(origin, proxy ,completeFn) =>{
                     return  function() {
                         if(origin.iproxy){
                             if(util.Type.isFunction(origin.iproxy[keepKey])){
+                                //console.log(origin.iproxy[keepKey])
                                 return origin.iproxy[keepKey]()
                             }
                             return origin.iproxy[keepKey]

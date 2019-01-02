@@ -2,6 +2,7 @@ const fs = require('fs')
 const path = require('path')
 const os = require('os')
 const util = require('./util')
+const find = require('find')
 
 const ppluginsDir = path.join(os.tmpdir() ,"pplugins")
 if(!fs.existsSync(ppluginsDir))
@@ -101,12 +102,13 @@ var iGetPpluginsJsonFromPaths = ppluginAllJson =>{
     }
     // re sort 
     for(key in ppsJson){
-        var array = json[key]
+        var array = ppsJson[key]
         array.sort((a,b)=>{
             return a.version>b.version
         })
         ppsJson[key] = array
     }
+    //console.log(ppsJson)
     return ppsJson
 }
 

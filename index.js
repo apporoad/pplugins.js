@@ -15,7 +15,7 @@ var unimplemented = (invokeModule,moduleName="",pluginType="")=>{
     }
     //console.log(path)
     //console.log("call dir :" +caller.getDir())
-
+    
     //console.log(invokeModule)
     //wait module loaded ,then ...
     Object.defineProperty(invokeModule, 'loaded', {
@@ -23,10 +23,11 @@ var unimplemented = (invokeModule,moduleName="",pluginType="")=>{
             return loaded;
         },
         set: function(value) {
+            //console.log(invokeModule.exports)
             if(value){
                 //console.log(invokeModule.id + ' loaded: ' + value);
                 //here load complete //and set proxy
-                //console.log(invokeModule.exports)
+                
                 engine.setProxy(invokeModule.exports,engine.getProxyPlugin(invokeModule.exports,moduleName,pluginType))
             }
         }

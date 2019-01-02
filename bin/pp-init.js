@@ -83,7 +83,7 @@ var start =()=>{
     ]
 }
 */
-var SaveToPluginJSON = pluginJson =>{
+var SaveToPluginJSON = (pluginJson) =>{
     /*
     { moduleName: 'pp-howtouse',
   type: 'default',
