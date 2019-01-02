@@ -8,7 +8,7 @@ if(!fs.existsSync(ppluginsDir))
     fs.mkdirSync(ppluginsDir)
 const ppluginsAllPath = path.join(ppluginsDir,'pplugins.all')
 const ppluginsJsonPath = path.join(ppluginsDir , 'pplugins.json')
-const assignListPath = path.json(ppluginsDir,'assignList.json')
+const assignListPath = path.join(ppluginsDir,'assignList.json')
 
 
 /**
@@ -159,7 +159,28 @@ exports.clear = ()=>{
         fs.unlinkSync(assignListPath)
 }
 
-
+/*
+{
+    "invoker" : {
+        "module" : {
+            type : "default",
+            version : "1.0.0"
+        }
+    }
+}
+*/
 exports.assign = (invoker,moduleName,type,version)=>{
-
+    invoker = invoker || "default"
+    type = type || "default"
+    version = version || "default"
+    var aJson = {}
+    if(fs.existsSync(assignListPath)){
+        aJson = JSON.parse(fs.readFileSync(assignListPath,'utf8'))
+    }
+    aJson[invoker] = {}
+    aJson[invoker][moduleName] = {
+        type : type,
+        version : version
+    }
+    fs.writeFileSync(assignListPath,JSON.stringify(aJson),'utf8')
 }

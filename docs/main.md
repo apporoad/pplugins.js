@@ -44,3 +44,16 @@ plugin.json is in your plugin dir , and it will tell pp plguin detail infos
 }
 ``` 
 same as pplugins.json
+
+
+## assignJson
+```js
+{
+    "invoker" : {
+        "module" : {
+            type : "default",
+            version : "1.0.0"
+        }
+    }
+}
+```
