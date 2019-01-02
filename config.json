@@ -2,5 +2,6 @@
     "pplugins":{
         "pluginEndWith" : ".plugin.js"
     },
-    "verbose" : false
+    "verbose" : false,
+    "internal" : 500
 }

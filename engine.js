@@ -6,6 +6,7 @@ const path = require('path')
 const lc = require('./localCache')
 const config = require('./config.json')
 const caller = require('caller.js')
+const cli = require('./cli')
 
 // a queue stores what need to load plugins
 /*
@@ -34,28 +35,28 @@ var iGenerateInjectRequestKey = request=>{
 }
 
 
-var icheckInject = inputModule =>{
-    //todo
-}
-/**
- *  inject your module with unreged methods
- */
-exports.injectPlugin=(inputModule,pluginName) =>{
-    icheckInject(inputModule)
-    if(!pluginName){
-        //todo read config
-    }
-    //console.log(inputModule)
-    for(var mt in inputModule){
-        var element = inputModule[mt]
-        if(util.Type.isFunction(element)){
-            //console.log(element)
-            //todo
-            inputModule[mt] = function(){console.log('hello good day')}
+// var icheckInject = inputModule =>{
+//     //todo
+// }
+// /**
+//  *  inject your module with unreged methods
+//  */
+// exports.injectPlugin=(inputModule,pluginName) =>{
+//     icheckInject(inputModule)
+//     if(!pluginName){
+//         //todo read config
+//     }
+//     //console.log(inputModule)
+//     for(var mt in inputModule){
+//         var element = inputModule[mt]
+//         if(util.Type.isFunction(element)){
+//             //console.log(element)
+//             //todo
+//             inputModule[mt] = function(){console.log('hello good day')}
 
-        }
-    }
-}
+//         }
+//     }
+// }
 
 var iJudgeDir = dir=>{
     var packageJson = path.join(dir,"package.json")
@@ -84,29 +85,46 @@ var igetTopScanPath = dir=>{
     return dirs.length >0 ? dirs.pop() : null
 }
 
+// auto to find plguins and load to cache
 var iAutoInject = ()=>{
-    //todo here cycle 
-    // find .plugin.js or dir with plugin.json
-    // console.trace()
-    // console.log(caller.getTopCallerDir())
+    // here to load local
     var packageRootPath = igetTopScanPath(caller.getTopCallerDir())
+    var localPPJson = {}
     if(packageRootPath){
-
-    }else{
-        //todo verbose
+        localPPJson =  cli.getPpluginsJsonFromDir(packageRootPath)
     }
+    // here to load global
+    var globalPPJson = cli.getGlobalPpluginsJson()
+    // get assign
+    var assign = cli.getAssign( global.pluginInvokerName || 'default')
+    // todos
 }
+
+
 
 // here auto execute injectRequestQueue
 var iAutoMatchRequest =()=>{
-    //todo here cycle 
-}
-
-exports.scanPlugin= (dir)=>{
-
+    while(injectRequestQueue.length>0){
+       var injectRequest = injectRequestQueue.pop()
+       var key = iGenerateInjectRequestKey({
+            origin : injectRequest.origin,
+            moduleName :injectRequest.moduleName,
+            type : injectRequest.type
+        })
+        var plguin = exports.getPlugin(injectRequest.moduleName,injectRequest.type)
+        var invokeModule = ioc.module(key + "_pplugins")
+        
+        for(var k in injectRequest.origin){
+            // here to reg 
+            invokeModule.reg(k,plguin[k])
+        }
+    }
+    // //here cycle 
+    // setTimeout(iAutoMatchRequest, config.internal || 500);
 }
 
 exports.getPlugin =(moduleName="", pluginType="")=>{
+    //from cache
     if(lc.namePlguinsMapGet(moduleName,pluginType)){
         var arr =lc.namePlguinsMapGet(moduleName,pluginType)
         if(arr.length==1)
@@ -129,12 +147,13 @@ exports.getProxyPlugin = (origin,moduleName="", pluginType="")=>{
     })
     var invokeModule = ioc.module(key + "_pplugins")
 
-    // todo check origin
-    for(var k in origin){
-        invokeModule.record([k])
-        //here function and others are same
-        proxy[k] = invokeModule.invoke(k).sync[k]
-    }
+    // // todo check origin
+    // for(var k in origin){
+    //     invokeModule.record([k])
+    //     //here function and others are same
+    //     proxy[k] = invokeModule.invoke(k).sync[k]
+    // }
+    
     //add    injectRequestQueue
     injectRequestQueue.push({
         key: key,
@@ -142,6 +161,8 @@ exports.getProxyPlugin = (origin,moduleName="", pluginType="")=>{
         moduleName : moduleName,
         type: pluginType
     }) 
+    iAutoMatchRequest()
+    proxy = invokeModule.invoke.sync
     return proxy
 }
 
@@ -261,10 +282,6 @@ exports.init =function(){
     if(!global.ppluginInitStarted){
         global.ppluginInitStarted =true
         iAutoInject()
-        iAutoMatchRequest()
     }
 }
 
-
-
-//iAutoInject()

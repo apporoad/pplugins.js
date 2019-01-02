@@ -11,14 +11,10 @@ const ppluginsJsonPath = path.join(ppluginsDir , 'pplugins.json')
 const assignListPath = path.join(ppluginsDir,'assignList.json')
 
 
-/**
- * here get plugin json from a path
- */
-exports.getPlguinJson = fPath=>{
-    var dir = fs.lstatSync(fPath).isFile() ? path.dirname(fPath) : fPath
-    var pluginJsonPath = path.join(dir, 'plugin.json')
-    if(fs.existsSync(pluginJsonPath)){
-        return require(pluginJsonPath)
+
+exports.getGlobalPpluginsJson = ()=>{
+    if(fs.existsSync(ppluginsJsonPath)){
+        return require(ppluginsJsonPath)
     }
     return {}
 }
@@ -86,25 +82,7 @@ var innerJionPpluginsJson = (ppsJson,pjsonPath) =>{
     }
 }
 
-/*
-{
-    "yourModuleName" : [
-        {
-            "type" : "pluginType",
-            "version": "1.0.0",
-            "path" : "d:/yourPlugin/p.js",
-            "pluginJsonPath" : "d:/yourPlguin/plugin.json" ,
-            "updateDate" : "xxxxx"
-        }
-    ]
-}*/
-exports.reCachePpluginsJson = (ppluginAllJson) =>{
-    if(!ppluginAllJson){
-        var ppluginAllJson = require(ppluginsAllPath)
-    }
-    if(fs.existsSync(ppluginsJsonPath)){
-        fs.unlinkSync(ppluginsJsonPath)
-    }
+var iGetPpluginsJsonFromPaths = ppluginAllJson =>{
     var ppsJson = {}
     for(var p in ppluginAllJson){
         if(fs.existsSync(p)){
@@ -129,8 +107,32 @@ exports.reCachePpluginsJson = (ppluginAllJson) =>{
         })
         ppsJson[key] = array
     }
+    return ppsJson
+}
+
+/*
+{
+    "yourModuleName" : [
+        {
+            "type" : "pluginType",
+            "version": "1.0.0",
+            "path" : "d:/yourPlugin/p.js",
+            "pluginJsonPath" : "d:/yourPlguin/plugin.json" ,
+            "updateDate" : "xxxxx"
+        }
+    ]
+}*/
+exports.reCachePpluginsJson = (ppluginAllJson) =>{
+    if(!ppluginAllJson){
+        var ppluginAllJson = require(ppluginsAllPath)
+    }
+    if(fs.existsSync(ppluginsJsonPath)){
+        fs.unlinkSync(ppluginsJsonPath)
+    }
+    var ppsJson =iGetPpluginsJsonFromPaths(ppluginAllJson)
     fs.writeFileSync(ppluginsJsonPath,JSON.stringify(ppsJson),'utf8')
 }
+
 
 
 exports.ls = isDetail=>{
@@ -183,4 +185,38 @@ exports.assign = (invoker,moduleName,type,version)=>{
         version : version
     }
     fs.writeFileSync(assignListPath,JSON.stringify(aJson),'utf8')
+}
+
+
+/*
+{
+        "module" : {
+            type : "default",
+            version : "1.0.0"
+        }
+    }
+*/
+exports.getAssign =invoker =>{
+    if(invoker){
+        if(fs.existsSync(assignListPath)){
+            aJson = JSON.parse(fs.readFileSync(assignListPath,'utf8'))
+            return aJson[invoker] || {}
+        }
+    }
+    return {}
+}
+
+
+/**
+ * get ppJson from dir
+ */
+exports.getPpluginsJsonFromDir= dir=>{
+    var files  = find.fileSync(/plugin\.json$/,dir)
+    var pplguinAllJson = {}
+    files.forEach(file=>{
+        if(!pplguinAllJson[file]){
+            pplguinAllJson[file] =new Date()
+        }
+    })
+    return iGetPpluginsJsonFromPaths(pplguinAllJson)
 }
