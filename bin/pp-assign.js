@@ -13,7 +13,8 @@ program.parse(process.argv)
 
 var start =()=>{
     if(program.args.length < 2){
-        console.log('try -h')
+        cli.lsAssign()
+        //console.log('try -h')
         return
     }
     var invokerName =  program.args[0] || 'default'
@@ -22,9 +23,9 @@ var start =()=>{
         console.log('plguinName cant be emplty!!!')
         return
     }
-    var type = program.args.length>2 ? (program.args[2] || 'default') : 'default'
-    var version = program.args.length>3 ? (program.args[3] || 'default') : 'default'
-    if(version != 'default'){
+    var type = program.args.length>2 ? (program.args[2] || 'default') : null
+    var version = program.args.length>3 ? (program.args[3] || 'default') : null
+    if(version){
         if(!/^\d+\.\d+\.\d+$/.test(version)){
             console.log('version should like x.x.x')
             return

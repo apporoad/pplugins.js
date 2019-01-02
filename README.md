@@ -3,6 +3,8 @@ plugins base on peerioc.js
 
 ## need todo 
 check proxy gc
+local cache the local plugin.json
+make demos
 
 
 ## how to use

@@ -41,6 +41,7 @@ exports.setPpluginsAll= json=>{
 }
 
 var innerJionPpluginsJson = (ppsJson,pjsonPath) =>{
+    //console.log(pjsonPath)
     pjson  = require(pjsonPath)
     for(var mn  in pjson){
         if(!ppsJson[mn]){
@@ -85,6 +86,7 @@ var innerJionPpluginsJson = (ppsJson,pjsonPath) =>{
 
 var iGetPpluginsJsonFromPaths = ppluginAllJson =>{
     var ppsJson = {}
+    //console.log(ppluginAllJson)
     for(var p in ppluginAllJson){
         if(fs.existsSync(p)){
             /*{
@@ -143,9 +145,9 @@ exports.ls = isDetail=>{
         for(var mn in pps){
             pps[mn].forEach(e => {
                 if(isDetail)
-                    console.log("[${mn}] [${e.type}] [${e.version}] : [${e.path}] : from [${e.pluginJsonPath}]" )
+                    console.log(`[${mn}] [${e.type}] [${e.version}] : [${e.path}] : from [${e.pluginJsonPath}]` )
                 else
-                    console.log("[${mn}] [${e.type}] [${e.version}]")
+                    console.log(`[${mn}] [${e.type}] [${e.version}]`)
             });
             
         }
@@ -207,6 +209,33 @@ exports.assign = (invoker,moduleName,type,version)=>{
     fs.writeFileSync(assignListPath,JSON.stringify(aJson),'utf8')
 }
 
+exports.lsAssign = ()=>{
+    if(fs.existsSync(assignListPath)){
+        aJson = JSON.parse(fs.readFileSync(assignListPath,'utf8'))
+        if(aJson.module){
+            for(ik in aJson.module){
+                console.log(`invoker:[${ik}]  moduleName:[${aJson.module[ik]}]`)
+            }
+        }
+        if(aJson.type){
+            for(ik in aJson.type){
+                for(mn in aJson.type[ik]){
+                    console.log(`invoker:[${ik}]  moduleName:[${mn}] type:[${aJson.type[ik][mn]}]`)
+                }
+            }
+        }
+        if(aJson.version){
+            for(ik in aJson.version){
+                for(mn in aJson.version[ik]){
+                    for(ty in aJson.version[ik][mn]){
+                        console.log(`invoker:[${ik}]  moduleName:[${mn}] type:[${ty}] version:[${aJson[ik][mn][ty]}]`)
+                    }
+                }
+            }
+        }
+    }
+}
+
 
 /*
 {
@@ -243,8 +272,11 @@ exports.getAssign =invoker =>{
  */
 exports.getPpluginsJsonFromDir= dir=>{
     var files  = find.fileSync(/plugin\.json$/,dir)
+    //console.log(files)
     var pplguinAllJson = {}
     files.forEach(file=>{
+        file = path.resolve(dir , file)
+        //console.log(file)
         if(!pplguinAllJson[file]){
             pplguinAllJson[file] =new Date()
         }

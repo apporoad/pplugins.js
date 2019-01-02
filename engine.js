@@ -217,6 +217,7 @@ exports.getPlugin =(moduleName="", pluginType="")=>{
             return arr[0]
         }
     }
+    console.log(`invoker:[${global.pluginInvokerName || 'default'}] moduleName:[${moduleName}] type:[${pluginType}] cant find plguin,please pp ls or pp assign`)
     throw Error("cant find your plugin:" + moduleName + " " + pluginType )
 }
 
