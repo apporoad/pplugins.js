@@ -137,7 +137,7 @@ var iAutoInject = ()=>{
     // find assign and set default
     if(assign.module){
         if(totalPPJson[assign.module]){
-            lc.namePlguinsMapAdd('default',totalPPJson[assign.module][0].path,'default')
+            lc.SecurityNamePlguinsMapAdd('default',totalPPJson[assign.module][0].path,'default')
         }
     }
     if(assign.type){
@@ -147,7 +147,7 @@ var iAutoInject = ()=>{
                     return one == two.type
                 })
                 if(index>-1)
-                    lc.namePlguinsMapAdd(mn,totalPPJson[mn][index].path,'default')
+                    lc.SecurityNamePlguinsMapAdd(mn,totalPPJson[mn][index].path,'default')
             }
         }
     }
@@ -158,11 +158,23 @@ var iAutoInject = ()=>{
                     return one.type == two.type && one.version == two.version
                 })
                 if(index > -1)
-                    lc.namePlguinsMapAdd(mn,totalPPJson[mn][index].path,ttype)
+                    lc.SecurityNamePlguinsMapAdd(mn,totalPPJson[mn][index].path,ttype)
             }
         }
     }
-
+    // add all
+    for(mn in totalPPJson){
+        totalPPJson[mn].forEach(element=>{
+            /*{
+            "type" : "pluginType",
+            "version": "1.0.0",
+            "path" : "d:/yourPlugin/p.js",
+            "pluginJsonPath" : "d:/yourPlguin/plugin.json" ,
+            "updateDate" : "xxxxx"
+        }*/
+            lc.SecurityNamePlguinsMapAdd(mn,element.path,element.type)
+        })
+    }
 }
 
 

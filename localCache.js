@@ -134,4 +134,14 @@ exports.pathPluginMapGet =  iPathPluginMapGet
 exports.pathPluginMapSet  = iPathPluginMapSet
 exports.namePlguinsMapGet = iNamePlguinsMapGet
 exports.namePlguinsMapAdd = iNamePlguinsMapAdd
+
+
+exports.SecurityNamePlguinsMapAdd = (moduleName,pluginPath,type) =>{
+    try{
+        iNamePlguinsMapAdd(moduleName,pluginPath,type)
+    }
+    catch(ex){
+        console.log('todo:' + ex)
+    }
+}
 exports.namePlguinsMapRemove =iNamePlguinsMapRemove
