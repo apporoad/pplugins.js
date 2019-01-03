@@ -42,6 +42,7 @@ exports.setPpluginsAll= json=>{
 
 var innerJionPpluginsJson = (ppsJson,pjsonPath) =>{
     //console.log(pjsonPath)
+    var pjsonDir = path.dirname(pjsonPath)
     pjson  = require(pjsonPath)
     for(var mn  in pjson){
         if(!ppsJson[mn]){
@@ -50,7 +51,7 @@ var innerJionPpluginsJson = (ppsJson,pjsonPath) =>{
                 ppsJson[mn].push({
                     type : element.type,
                     version : element.version,
-                    path :element.path,
+                    path :element.path || path.join(pjsonDir,element.rpath),
                     rpath : element.rpath,
                     pluginJsonPath : pjsonPath,
                     updateDate : new Date()
@@ -74,7 +75,7 @@ var innerJionPpluginsJson = (ppsJson,pjsonPath) =>{
                 ppsJson[mn].push({
                     type : element.type,
                     version : element.version,
-                    path :element.path,
+                    path :element.path  || path.join(pjsonDir,element.rpath),
                     rpath : element.rpath,
                     pluginJsonPath : pjsonPath,
                     updateDate : new Date()
@@ -94,7 +95,7 @@ var iGetPpluginsJsonFromPaths = ppluginAllJson =>{
                     {
                         "type" : "pluginType",
                         "version": "1.0.0",
-                        "path" : "yourPlugin/p.js"
+                        //"path" : "yourPlugin/p.js"
                         "rpath" : "rpath"
                     }
                 ]

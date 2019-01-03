@@ -37,7 +37,7 @@ plugin.json is in your plugin dir , and it will tell pp plguin detail infos
         {
             "type" : "pluginType",
             "version": "1.0.0",
-            "path" : "yourPlugin/p.js"
+            //"path" : "yourPlugin/p.js"
             "rpath" : "rpath"
         }
     ]
