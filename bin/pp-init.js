@@ -95,7 +95,7 @@ var SaveToPluginJSON = (pluginJson) =>{
             trueJson[pluginJson.moduleName] = [{
                 type : pluginJson.type,
                 rpath : pluginJson.rpath,
-                path : pluginJson.path,
+                //path : pluginJson.path,
                 version : '1.0.0'
             }]
             writeTruJson(pluginJsonPath,trueJson)
@@ -107,7 +107,7 @@ var SaveToPluginJSON = (pluginJson) =>{
         trueJson[pluginJson.moduleName] = [{
             type : pluginJson.type,
             rpath : pluginJson.rpath,
-            path : pluginJson.path,
+            //path : pluginJson.path,
             version : '1.0.0'
         }]
         writeTruJson(pluginJsonPath,trueJson)
@@ -124,7 +124,7 @@ var SaveToPluginJSON = (pluginJson) =>{
         trueJson[pluginJson.moduleName].unshift({
             type : pluginJson.type,
             rpath : pluginJson.rpath,
-            path : pluginJson.path,
+            //path : pluginJson.path,
             version : '1.0.0'
         })
         writeTruJson(pluginJsonPath,trueJson)
@@ -162,7 +162,7 @@ var SaveToPluginJSON = (pluginJson) =>{
         trueJson[pluginJson.moduleName].unshift({
             type : pluginJson.type,
             rpath : pluginJson.rpath,
-            path : pluginJson.path,
+            //path : pluginJson.path,
             version : vInfo.version
         })
         writeTruJson(pluginJsonPath,trueJson)
